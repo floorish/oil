@@ -61,16 +61,22 @@ class Generate_Admin extends Generate_Scaffold
 
 		foreach ($default_files as $file)
 		{
-			// check if there's a template in app, and if so, use that
-			if (file_exists(APPPATH.'views/'.static::$view_subdir.$file['source']))
-			{
-				Generate::create(APPPATH.$file['location'], file_get_contents(APPPATH.'views/'.static::$view_subdir.$file['source']), $file['type']);
-			}
-			else
-			{
-				Generate::create(APPPATH.$file['location'], file_get_contents(\Package::exists('oil').'views/'.static::$view_subdir.$file['source']), $file['type']);
-			}
-		}
+            if ( ! file_exists($content = APPPATH.$file['location']))
+            {
+
+                // check if there's a template in app, and if so, use that
+                if (file_exists(APPPATH.'views/'.static::$view_subdir.$file['source']))
+                {
+                    Generate::create(APPPATH.$file['location'], file_get_contents(APPPATH.'views/'.static::$view_subdir.$file['source']), $file['type']);
+                }
+                else
+                {
+                    Generate::create(APPPATH.$file['location'], file_get_contents(PKGPATH.'oil/views/'.static::$view_subdir.$file['source']), $file['type']);
+                }
+
+            }
+
+        }
 
 		parent::forge($args, $subfolder);
 	}
